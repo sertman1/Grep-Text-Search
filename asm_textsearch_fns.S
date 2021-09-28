@@ -23,9 +23,38 @@ read_line:
 	.globl count_occurrences
 count_occurrences:
 
-	subq $8, %rsp 		/* align stack pointer to multiple of 16 */
+	subq $8, %rsp 					/* align stack pointer to multiple of 16 */
+	movq $0, %rax					/* occurences = 0 at the start */
+/*	movq %rsi, %r9					/* %r9 temporarily stores str so rsi can be reset to its original value */
+	movq $0, %r9
 
-	addq $8, %rsp 		/* realign stack pointer */
+.LcompareChars:
+	movb (%rsi), %r10b				/* store 1 char into 'temp' %r10 space for comparison */
+	cmpb %r10b, (%rdi)				/* compare the string to the prefix char by char */
+	je .LcheckStrNullTerm			/* if the chars match, check if next char in pfx is null */
+	jmp .LnextCharInLine
+
+.LcheckStrNullTerm:
+	incq %rsi
+/*	addq $1, %r9
+*/	cmpb $0, (%rsi)					/* is prefix term null? */
+	je .LoccurenceFound				/* if so, it matched the start of string verbatim. Return $1 */
+	jmp .LcompareChars
+
+.LoccurenceFound:
+	addq $1, %rax
+	jmp .LnextCharInLine
+
+.LnextCharInLine:
+	incq %rdi
+	cmpb $0, (%rdi)					/* has end of line been reached yet? */
+	je .LdoneWithCountOccurences	/* if so, immmediatley end loop and return */
+/*	subq (%r9), %rsi
+/*	movq $0, %r9					/* reset %rsi to its original value */
+	jmp .LcompareChars				/* otherwise, keep on searching for occurences */
+
+.LdoneWithCountOccurences:
+	addq $8, %rsp 					/* realign stack pointer */
 	ret
 
 /*
