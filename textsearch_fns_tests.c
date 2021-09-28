@@ -17,11 +17,11 @@ void cleanup(TestObjs *objs);
 // TODO: declare test functions
 
 // Example:
-void test_read_line(TestObjs *objs);
-void test_print_line(TestObjs *objs);
+//void test_read_line(TestObjs *objs);
+//void test_print_line(TestObjs *objs);
 void test_find_string_length();
 void test_starts_with();
-void test_count_occurences(TestObjs *objs);
+//void test_count_occurences(TestObjs *objs);
 
 
 int main(int argc, char **argv) {
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   //TEST(test_read_line);
   //TEST(test_print_line);
   TEST(test_find_string_length);
-  //TEST(test_starts_with);
+  TEST(test_starts_with);
   //TEST(test_count_occurences);
 
   TEST_FINI();
@@ -75,7 +75,7 @@ TestObjs *setup(void) {
 void cleanup(TestObjs *objs) {
   free(objs);
 }
-
+/*
 void test_count_occurences(TestObjs *objs) {
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
@@ -109,6 +109,7 @@ void test_count_occurences(TestObjs *objs) {
   ASSERT(count_occurrences("aaaa 123", "aaa") == 2);
 
 }
+*/
 
 void test_starts_with () {
   const char* s = "AndThusIWalked";
@@ -152,7 +153,7 @@ void test_find_string_length() {
   const char* opening_line = "It is a truth universally acknowledged, that a single man in\n";
   ASSERT(find_string_length(opening_line) == 61);
  }
-
+/*
 void test_read_line(TestObjs *objs) {
   // the fmemopen function allows us to treat a character string
   // as an input file
@@ -262,3 +263,5 @@ void test_print_line(TestObjs * objs) {
   fclose(in4);
   fclose(out2);
 }
+*/
+
