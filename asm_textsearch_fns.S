@@ -23,7 +23,7 @@ count_occurrences:
 							
 .LcompareChars:
 	movb (%rsi,%r9,1), %r10b		/* store str[index] to %r10 for comparison */
-	cmpb %r10b, (%rdi)				/* does str[index] == the char pointed to by line? */
+	cmpb %r10b, (%rdi,%r9,1)		/* does str[index] == the char pointed to by line? */
 	je .LcheckStrNullTerm			/* if so, see if end of str has been reach */
 	jmp .LnextCharInLine			/* if not, current char of line is not a match */ 
 
@@ -101,7 +101,7 @@ starts_with:
 	cmpb $0, (%rsi)				/* is pfx null? */
 	je .LdoneWithComparison		/* if so, it matched the start of s verbatim. Return $1 (true) */
 	jmp .LcompareCharacters		/* otherwise, continue checking for instance where thier chars dont equal */
-	
+
 .LdoneWithComparison:
 	addq $8, %rsp		
 	ret
