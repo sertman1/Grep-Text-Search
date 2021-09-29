@@ -151,6 +151,14 @@ void test_starts_with () {
   ASSERT(starts_with(null,null2) == 1);
   ASSERT(starts_with(null, so_yeah) == 0);
   ASSERT(starts_with(pfx_right, null2) == 0);
+  ASSERT(starts_with("WELPzz","WELp") == 0);
+  ASSERT(starts_with("   i guess...,","   i ") == 1);
+  ASSERT(starts_with("   i guess...,","   i  gX") == 0);
+  ASSERT(starts_with("   i guess...,","   i guess..., .") == 0);
+  ASSERT(starts_with("nochance","chance") == 0);
+  ASSERT(starts_with("noNONONONONONO","NO") == 0);
+  ASSERT(starts_with("","") == 1);
+  ASSERT(starts_with(" ", "") == 0);
 }
 
 void test_find_string_length() {
@@ -175,7 +183,10 @@ void test_find_string_length() {
   ASSERT(find_string_length(some) == 4);
   const char* opening_line = "It is a truth universally acknowledged, that a single man in\n";
   ASSERT(find_string_length(opening_line) == 61);
- }
+  ASSERT(find_string_length("notSUPERLONG   ") == 15);
+  ASSERT(find_string_length("\nshort ") == 7);
+  ASSERT(find_string_length("%^&crazy! *#@)$**kaO-2~'?QB+={]") == 31);
+}
 /*
 void test_read_line(TestObjs *objs) {
   // the fmemopen function allows us to treat a character string
