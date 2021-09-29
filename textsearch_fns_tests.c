@@ -107,7 +107,7 @@ ASSERT(count_occurrences(buff, " ") == 1);
   ASSERT(count_occurrences(buf2, "So") == 1);
   ASSERT(count_occurrences(buf2, "nn") == 1);
   ASSERT(count_occurrences(buf2, "2pac") == 0);
-  ASSERT(count_occurrences(buff, " ") == 4);
+  ASSERT(count_occurrences(buf2, "a") == 3);
 /*
   FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");
   char buf3[MAXLINE+1];
@@ -122,13 +122,14 @@ ASSERT(count_occurrences(buff, " ") == 1);
   ASSERT(count_occurrences("ThIsIsATest", "I") == 2);
   ASSERT(count_occurrences("aaaa 123", "aaa") == 2);
 
-  const char* buf4 = "There are multiple there there there theres in this sentence. But only five there there theres are desired.";
-  ASSERT(count_occurrences(buf4, "there") == 5);
+  const char* buf4 = "There are multiple there there there theres in this sentence. Seven  there there theres are desired.";
+  ASSERT(count_occurrences(buf4, "there") == 7);
   ASSERT(count_occurrences(buf4, "There") == 1);
   ASSERT(count_occurrences(buf4, "theres") == 2);
 
   const char* buf5 = "Truthfully, truth is truthful..";
-  ASSERT(count_occurrences(buf5, "truth") == 3);
+  ASSERT(count_occurrences(buf5, "truth") == 2);
+  ASSERT(count_occurrences(buf5, "Truth") == 1);
   ASSERT(count_occurrences(buf5, ".") == 2);
 }
 

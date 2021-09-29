@@ -1,4 +1,4 @@
-/*
+/*`
  * Assembly language implementations of functions declared in
  * textsearch_fns.h
  */
@@ -11,38 +11,38 @@
  *
  * Parameters:
  *   line - pointer to beginning of the string to parse for occurences
- * 	 str - pointer to string whose # of occurences in 'line' will be returned
+ *   str - pointer to string whose number of occurences in line will be returned
  */
 
 	.globl count_occurrences
 count_occurrences:
 
 	subq $8, %rsp 					
-	movq $0, %rax					/* occurences = 0 at the start */
-	movq $0, %r9					/* %r9 used as a mutual index to trace characters for 1-to-1 match */
+	movq $0, %rax			/* occurences = 0 at the start */
+	movq $0, %r9			/* %r9 used as a mutual index to trace characters for 1-to-1 match */
 							
 .LcompareChars:
-	movb (%rsi,%r9,1), %r10b		/* store str[index] to %r10 for comparison */
-	cmpb %r10b, (%rdi,%r9,1)		/* does str[index] == the char pointed to by line + index? */
-	je .LcheckStrNullTerm			/* if so, see if end of str has been reach */
-	jmp .LnextCharInLine			/* if not, current char of line is not a possible match */ 
+	movb (%rsi,%r9,1), %r10b	/* store str[index] to %r10 for comparison */
+	cmpb %r10b, (%rdi,%r9,1)	/* does str[index] == the char pointed to by line + index? */
+	je .LcheckStrNullTerm		/* if so, see if end of str has been reach */
+	jmp .LnextCharInLine		/* if not, current char of line is not a possible match */ 
 
 .LcheckStrNullTerm:
-	add $1, %r9						/* index++ */
-	cmpb $0, (%rsi,%r9,1)			/* is the next char of str null? */
-	je .LoccurenceFound				/* if so, str matched with an index of line exactly */
-	jmp .LcompareChars				/* if not, check the following index for a match */
+	add $1, %r9			/* index++ */
+	cmpb $0, (%rsi,%r9,1)		/* is the next char of str null? */
+	je .LoccurenceFound		/* if so, str matched with an index of line exactly */
+	jmp .LcompareChars		/* if not, check the following index for a match */
 
 .LoccurenceFound:
-	addq $1, %rax					/* occurences++ */
+	addq $1, %rax			/* occurences++ */
 	jmp .LnextCharInLine			
 
 .LnextCharInLine:
-	movq $0, %r9					/* reset index to 0 to check for other occurences of str */	
-	incq %rdi						/* advance line (%rdi) to the following char to be checked */ 
-	cmpb $0, (%rdi)					/* has end of line been reached yet? */
+	movq $0, %r9			/* reset index to 0 to check for other occurences of str */	
+	incq %rdi			/* advance line (%rdi) to the following char to be checked */ 
+	cmpb $0, (%rdi)			/* has end of line been reached yet? */
 	je .LdoneWithCountOccurences	/* if so, immmediatley return */
-	jmp .LcompareChars				/* otherwise, keep on searching for occurences */
+	jmp .LcompareChars		/* otherwise, keep on searching for occurences */
 
 .LdoneWithCountOccurences:
 	addq $8, %rsp 					
@@ -66,8 +66,8 @@ find_string_length:
 	cmpb $0, (%rdi)		/* NUL terminator reached? */
 	je .LdoneWithLoop	/* if so, immediatley return */
 	addq $1, %rax 		/* if not, add 1 to (length) return value */
-	incq %rdi  			/* advance to next character */
-	jmp .LcheckNullTerm /* continue loop */
+	incq %rdi  		/* advance to next character */
+	jmp .LcheckNullTerm 	/* continue loop */
 
 .LdoneWithLoop:
 	addq $8, %rsp 		
@@ -86,19 +86,19 @@ find_string_length:
 starts_with:
 
 	subq $8, %rsp 				
-	movq $1, %rax 				/* assume true at first */
-								/* check for deniability in loops: */
+	movq $1, %rax 			/* assume true at first */
+					/* check for deniability in loops: */
 .LcompareCharacters:
-	movb (%rsi), %r10b			/* store 1 char into 'temp' %r10 space for comparison */
-	cmpb %r10b, (%rdi)			/* compare the string to the prefix char by char */
+	movb (%rsi), %r10b		/* store 1 char into 'temp' %r10 space for comparison */
+	cmpb %r10b, (%rdi)		/* compare the string to the prefix char by char */
 	je .LcheckPrefixNullTerm	/* if the chars match, check if next char in pfx is null */
-	movq $0, %rax				/* if not equal, return false (0) */
+	movq $0, %rax			/* if not equal, return false (0) */
 	jmp .LdoneWithComparison
 
 .LcheckPrefixNullTerm:
-	incq %rdi					/* advance s and pfx to their next char */
+	incq %rdi			/* advance s and pfx to their next char */
 	incq %rsi
-	cmpb $0, (%rsi)				/* is pfx null? */
+	cmpb $0, (%rsi)			/* is pfx null? */
 	je .LdoneWithComparison		/* if so, it matched the start of s verbatim. Return $1 (true) */
 	jmp .LcompareCharacters		/* otherwise, continue checking for instance where thier chars dont equal */
 
