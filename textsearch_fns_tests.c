@@ -84,10 +84,11 @@ ASSERT(count_occurrences(buff, "truth") == 1);
   char buf[MAXLINE + 1];
   read_line(in, buf);
  */
-char * buf = "It is a truth universally acknowledged, that a single man in";
-  ASSERT(count_occurrences(buf, "truth") == 1);
+const char * buf = "It is a truth universally acknowledged, that a single man in";
+ASSERT(count_occurrences(buf, "It") == 1);
+ASSERT(count_occurrences(buf, "truth") == 1);
   ASSERT(count_occurrences(buf, "uni") == 1);
-  //ASSERT(count_occurrences(buf, "i") == 4);
+  ASSERT(count_occurrences(buf, "i") == 4);
   ASSERT(count_occurrences(buf, "X") == 0);
   ASSERT(count_occurrences(buf, "universally acknowledged,") == 1);
   ASSERT(count_occurrences(buf, "that a single man in") == 1);
