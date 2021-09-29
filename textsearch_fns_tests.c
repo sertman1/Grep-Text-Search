@@ -78,7 +78,11 @@ void cleanup(TestObjs *objs) {
 void test_count_occurences(TestObjs *objs) {
 char * buff = "One truth";
 ASSERT(count_occurrences(buff, "truth") == 1);
+ASSERT(count_occurrences(buff, "ne") == 1);
+ASSERT(count_occurrences(buff, "ruth") == 1);
+ASSERT(count_occurrences(buff, " ") == 1);
 /* code using read_line function commented out and replaced with literal buf instation instead (until read_line is implemented in ASM)
+
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
   read_line(in, buf);
@@ -103,6 +107,7 @@ ASSERT(count_occurrences(buff, "truth") == 1);
   ASSERT(count_occurrences(buf2, "So") == 1);
   ASSERT(count_occurrences(buf2, "nn") == 1);
   ASSERT(count_occurrences(buf2, "2pac") == 0);
+  ASSERT(count_occurrences(buff, " ") == 4);
 /*
   FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");
   char buf3[MAXLINE+1];
@@ -117,6 +122,14 @@ ASSERT(count_occurrences(buff, "truth") == 1);
   ASSERT(count_occurrences("ThIsIsATest", "I") == 2);
   ASSERT(count_occurrences("aaaa 123", "aaa") == 2);
 
+  const char* buf4 = "There are multiple there there there theres in this sentence. But only five there there theres are desired.";
+  ASSERT(count_occurrences(buf4, "there") == 5);
+  ASSERT(count_occurrences(buf4, "There") == 1);
+  ASSERT(count_occurrences(buf4, "theres") == 2);
+
+  const char* buf5 = "Truthfully, truth is truthful..";
+  ASSERT(count_occurrences(buf5, "truth") == 3);
+  ASSERT(count_occurrences(buf5, ".") == 2);
 }
 
 

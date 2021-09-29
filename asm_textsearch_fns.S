@@ -19,19 +19,19 @@ count_occurrences:
 
 	subq $8, %rsp 					
 	movq $0, %rax					/* occurences = 0 at the start */
-	movq $0, %r9					/* %r9 used as an index to trace characters in str */
+	movq $0, %r9					/* %r9 used as a mutual index to trace characters for 1-to-1 match */
 							
 .LcompareChars:
 	movb (%rsi,%r9,1), %r10b		/* store str[index] to %r10 for comparison */
-	cmpb %r10b, (%rdi,%r9,1)		/* does str[index] == the char pointed to by line? */
+	cmpb %r10b, (%rdi,%r9,1)		/* does str[index] == the char pointed to by line + index? */
 	je .LcheckStrNullTerm			/* if so, see if end of str has been reach */
-	jmp .LnextCharInLine			/* if not, current char of line is not a match */ 
+	jmp .LnextCharInLine			/* if not, current char of line is not a possible match */ 
 
 .LcheckStrNullTerm:
 	add $1, %r9						/* index++ */
-	cmpb $0, (%rsi,%r9,1)			/* is the next char of string null? */
-	je .LoccurenceFound				/* if so, str matched with an index of line excactly */
-	jmp .LcompareChars				/* if not, check the following index for a character match */
+	cmpb $0, (%rsi,%r9,1)			/* is the next char of str null? */
+	je .LoccurenceFound				/* if so, str matched with an index of line exactly */
+	jmp .LcompareChars				/* if not, check the following index for a match */
 
 .LoccurenceFound:
 	addq $1, %rax					/* occurences++ */
@@ -39,7 +39,7 @@ count_occurrences:
 
 .LnextCharInLine:
 	movq $0, %r9					/* reset index to 0 to check for other occurences of str */	
-	incq %rdi						/* advance line (%rdi) to the following char */ 
+	incq %rdi						/* advance line (%rdi) to the following char to be checked */ 
 	cmpb $0, (%rdi)					/* has end of line been reached yet? */
 	je .LdoneWithCountOccurences	/* if so, immmediatley return */
 	jmp .LcompareChars				/* otherwise, keep on searching for occurences */
