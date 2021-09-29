@@ -84,14 +84,3 @@ int starts_with(const char *s, const char *pfx) {
     }
     return 1;
 }
-
-/*
-fopen
-fclose
-printf
-fprintf
-fgetc
-fputc
-exit
-*/
-

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // these functions may be used in the test program
+#include <string.h> 
 #include "textsearch_fns.h"
 #include "tctest.h"
 
@@ -14,7 +14,6 @@ typedef struct {
 TestObjs *setup(void);
 void cleanup(TestObjs *objs);
 
-// TODO: declare test functions
 
 // Example:
 //void test_read_line(TestObjs *objs);
@@ -79,14 +78,14 @@ void cleanup(TestObjs *objs) {
 void test_count_occurences(TestObjs *objs) {
 char * buff = "One truth";
 ASSERT(count_occurrences(buff, "truth") == 1);
-/*
+/* code using read_line function commented out and replaced with literal buf instation instead (until read_line is implemented in ASM)
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
   read_line(in, buf);
  */
-const char * buf = "It is a truth universally acknowledged, that a single man in";
-ASSERT(count_occurrences(buf, "It") == 1);
-ASSERT(count_occurrences(buf, "truth") == 1);
+  const char * buf = "It is a truth universally acknowledged, that a single man in";
+  ASSERT(count_occurrences(buf, "It") == 1);
+  ASSERT(count_occurrences(buf, "truth") == 1);
   ASSERT(count_occurrences(buf, "uni") == 1);
   ASSERT(count_occurrences(buf, "i") == 4);
   ASSERT(count_occurrences(buf, "X") == 0);
@@ -99,21 +98,25 @@ ASSERT(count_occurrences(buf, "truth") == 1);
   FILE *in2 = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
   char buf2[MAXLINE + 1];
   read_line(in2, buf2);
+*/
+  const char* buf2 = "So you wanna be hardcore";
   ASSERT(count_occurrences(buf2, "So") == 1);
   ASSERT(count_occurrences(buf2, "nn") == 1);
   ASSERT(count_occurrences(buf2, "2pac") == 0);
-
+/*
   FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");
   char buf3[MAXLINE+1];
   read_line(in3, buf3);
+*/
+  const char* buf3 = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
   ASSERT(count_occurrences(buf3, "0") == 511);
-  read_line(in3, buf3);
+  /* read_line(in3, buf3); */
+  const char* buf3 = "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
   ASSERT(count_occurrences(buf3, "1") == 511);
-
   ASSERT(count_occurrences("ThisIsATest", "i") == 1);
   ASSERT(count_occurrences("ThIsIsATest", "I") == 2);
   ASSERT(count_occurrences("aaaa 123", "aaa") == 2);
-*/
+  
 }
 
 
