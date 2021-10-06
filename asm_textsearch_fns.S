@@ -2,11 +2,47 @@
  * Assembly language implementations of functions declared in
  * textsearch_fns.h
  */
+	.section .rodata
 
+newLine: .string "\n"  
+charFormat: .string "%c"
 	.section .text
 
+	.globl 
 
+/* print_line - prints the specified line of text (up to 511 chars) 
+ * to both the console and the specified file.
+ *
+ * Parameters:
+ *    out - pointer to the file struct who will have the line printed to
+ *    buf - the line of text to be printed
+ */
 
+	.globl print_line
+print_line:
+	subq $8, %rsp
+	movq %rdi, %r12
+	movq %rsi, %r13		
+
+.LnextChar:
+	cmpb $0, (%rsi)
+	jle .LdonePrinting
+	movq $charFormat, %rdi
+	movq (%rsi), %rsi
+	call printf
+	movq (%rsi), %rdi
+	movq %r12, %rsi
+	call fputc 
+	incq %r13
+	movq %r13, %rsi
+	jmp .LnextChar
+
+.LdonePrinting:
+	movq $newLine, %rdi
+	call printf
+	movq %r12, %rsi
+	addq $8, %rsp
+	ret
 
 /*
  * count_occurrences - determines how often the second specified 

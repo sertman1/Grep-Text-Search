@@ -17,7 +17,7 @@ void cleanup(TestObjs *objs);
 
 // Example:
 //void test_read_line(TestObjs *objs);
-//void test_print_line(TestObjs *objs);
+void test_print_line(TestObjs *objs);
 void test_find_string_length();
 void test_starts_with();
 void test_count_occurences(TestObjs *objs);
@@ -32,8 +32,8 @@ int main(int argc, char **argv) {
 
   TEST_INIT();
 
-  //TEST(test_read_line);
-  //TEST(test_print_line);
+//  TEST(test_read_line);
+  TEST(test_print_line);
   TEST(test_find_string_length);
   TEST(test_starts_with);
   TEST(test_count_occurences);
@@ -247,10 +247,14 @@ void test_read_line(TestObjs *objs) {
   fclose(in);
   fclose(in2);
 }
-
+*/
 void test_print_line(TestObjs * objs) {
+  char * buf = "So you wanna be hardcore";
+  FILE* out = fopen("output.txt", "w+");
+  ASSERT(out != NULL);
+  print_line(out, buf);
 
-  FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
+/*FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");/
   char buf[MAXLINE + 1];
   read_line(in, buf);
 
@@ -298,6 +302,7 @@ void test_print_line(TestObjs * objs) {
   fclose(in3);
   fclose(in4);
   fclose(out2);
+  */
 }
-*/
+
 

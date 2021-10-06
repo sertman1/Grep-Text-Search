@@ -8,4 +8,5 @@
 	.globl main
 main:
 	/* TODO: implement the main function */
+	movq $0, %rax
 	ret
