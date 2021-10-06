@@ -1,4 +1,4 @@
-/*`
+/*`TEXTFILE OUTPUT, INVALID READ/WRITE/JUMP ON MS2, WHICH REGS R WE FREE TO USE FOR LOCAL VARS: WHY DID R1 FIX IT? WILL THE REGISTERS CONFLICT WHEN TESTED TOGETHER IN MAIN????
  * Assembly language implementations of functions declared in
  * textsearch_fns.h
  */
@@ -8,7 +8,44 @@ newLine: .string "\n"
 charFormat: .string "%c"
 	.section .text
 
-	.globl 
+	.globl read_line
+read_line:
+	subq $8, %rsp
+	movq %rdi, %r13
+	call fgetc
+	cmpb $0, %al
+	jle .LerrorFile
+.LreadNextChar:
+	movq %rax, %rsi			/* why cant we use %al and movb ?*/
+	call fgetc
+	cmpb $1, %al
+	jle .LdoneReading
+	cmpb $10, %al
+	jle .LdoneReading
+	incq %rsi
+	incq %r12 
+
+.LdoneReading:
+	cmpq $511, %r12
+	jae .LremoveOverflowedChars
+	jmp .LsuccessfulFile
+
+.LremoveOverflowedChars:
+	cmpb $10, %al
+	je .LsuccessfulFile
+	call fgetc
+	cmpb $0, %al
+	jle .LsuccessfulFile
+	jmp .LremoveOverflowedChars
+	
+.LerrorFile:
+	addq $8, %rsp
+	movq $0, %rax
+	ret
+.LsuccessfulFile:
+	addq $8, %rsp
+	movq $1, %rax
+	ret 
 
 /* print_line - prints the specified line of text (up to 511 chars) 
  * to both the console and the specified file.
@@ -57,12 +94,11 @@ print_line:
 	.globl count_occurrences
 count_occurrences:
 
-	subq $8, %rsp	
-	pushq %r11
+	pushq %r12
 	pushq %r14
 	pushq %r15
 
-	movq $0, %r11
+	movq $0, %r12
 	movq %rdi, %r14
 	movq %rsi, %r15
 
@@ -73,21 +109,20 @@ count_occurrences:
 	call starts_with
 	cmpl $1, %eax
 	jl .LadvanceToNext
-	incq %r11
+	incq %r12
 
 .LadvanceToNext:
-	incq %r14				/* advance to next char */
+	incq %r12				/* advance to next char */
 	movq %r14, %rdi
 	movq %r15, %rsi
 	jmp .LcountOccurences
 
 .LdoneCounting:
-	movq %r11, %rax
+	movq %r12, %rax
 
-	addq $8, %rsp
-	popq %r10
 	popq %r15
 	popq %r14
+	popq %r12
 	ret
 
 

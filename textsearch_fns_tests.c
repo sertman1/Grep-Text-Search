@@ -16,7 +16,7 @@ void cleanup(TestObjs *objs);
 
 
 // Example:
-//void test_read_line(TestObjs *objs);
+void test_read_line(TestObjs *objs);
 void test_print_line(TestObjs *objs);
 void test_find_string_length();
 void test_starts_with();
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
   TEST_INIT();
 
-//  TEST(test_read_line);
+  TEST(test_read_line);
   TEST(test_print_line);
   TEST(test_find_string_length);
   TEST(test_starts_with);
@@ -189,7 +189,7 @@ void test_find_string_length() {
   ASSERT(find_string_length("\nshort ") == 7);
   ASSERT(find_string_length("%^&crazy! *#@)$**kaO-2~'?QB+={]") == 31);
 }
-/*
+
 void test_read_line(TestObjs *objs) {
   // the fmemopen function allows us to treat a character string
   // as an input file
@@ -247,19 +247,19 @@ void test_read_line(TestObjs *objs) {
   fclose(in);
   fclose(in2);
 }
-*/
+
 void test_print_line(TestObjs * objs) {
-  char * buf = "So you wanna be hardcore";
   FILE* out = fopen("output.txt", "w+");
   ASSERT(out != NULL);
+  char * buf = "It is a truth universally acknowledged, that a single man in";
+  char * buf2 = "possession of a good fortune, must be in want of a wife.";
   print_line(out, buf);
+  print_line(out, buf2);
+  fclose(out);
 
-/*FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");/
+/*  FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
   char buf[MAXLINE + 1];
   read_line(in, buf);
-
-  FILE* out = fopen("output.txt", "w+");
-  ASSERT(out != NULL);
 
   print_line(out, buf);
 
@@ -302,7 +302,7 @@ void test_print_line(TestObjs * objs) {
   fclose(in3);
   fclose(in4);
   fclose(out2);
-  */
+ */
 }
 
 
