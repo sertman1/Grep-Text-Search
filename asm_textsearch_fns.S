@@ -15,7 +15,42 @@
  */
 
 
-	
+	.globl count_occurrences
+count_occurrences:
+
+	subq $8, %rsp
+	pushq %r10
+	pushq %r14
+	pushq %r15
+
+	movq $0, %r10
+	movq %rdi, %r14
+	movq %rsi, %r15
+
+.LcountOccurences:
+	cmpb $0, (%r14)
+	jle .LdoneCounting
+
+	call starts_with
+	cmpb $0, (%rax)
+	jle .LadvanceToNext
+	incq %r10
+
+.LadvanceToNext:
+	incq %r14				/* advance to next char */
+	movq %r14, %rdi
+	movq %r15, %rsi
+	jmp .LcountOccurences
+
+.LdoneCounting:
+	movq %r10, %rax
+
+	addq $8, %rsp
+	popq %r15
+	popq %r14
+	popq %r10
+	ret
+
 
 /*
  * find_string_length - computes the number of non-null characters
