@@ -76,6 +76,8 @@ void cleanup(TestObjs *objs) {
 }
 
 void test_count_occurences(TestObjs *objs) {
+char *b = "one";
+ASSERT(count_occurrences(b, "one") == 1);
 char * buff = "One truth";
 ASSERT(count_occurrences(buff, "truth") == 1);
 ASSERT(count_occurrences(buff, "ne") == 1);
