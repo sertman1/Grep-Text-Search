@@ -107,7 +107,7 @@ ASSERT(count_occurrences(buff, " ") == 1);
   ASSERT(count_occurrences(buf2, "So") == 1);
   ASSERT(count_occurrences(buf2, "nn") == 1);
   ASSERT(count_occurrences(buf2, "2pac") == 0);
-  ASSERT(count_occurrences(buff, " ") == 4);
+  ASSERT(count_occurrences(buf2, "a") == 3);
 /*
   FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");
   char buf3[MAXLINE+1];
@@ -122,13 +122,14 @@ ASSERT(count_occurrences(buff, " ") == 1);
   ASSERT(count_occurrences("ThIsIsATest", "I") == 2);
   ASSERT(count_occurrences("aaaa 123", "aaa") == 2);
 
-  const char* buf4 = "There are multiple there there there theres in this sentence. But only five there there theres are desired.";
-  ASSERT(count_occurrences(buf4, "there") == 5);
+  const char* buf4 = "There are multiple there there there theres in this sentence. Seven  there there theres are desired.";
+  ASSERT(count_occurrences(buf4, "there") == 7);
   ASSERT(count_occurrences(buf4, "There") == 1);
   ASSERT(count_occurrences(buf4, "theres") == 2);
 
   const char* buf5 = "Truthfully, truth is truthful..";
-  ASSERT(count_occurrences(buf5, "truth") == 3);
+  ASSERT(count_occurrences(buf5, "truth") == 2);
+  ASSERT(count_occurrences(buf5, "Truth") == 1);
   ASSERT(count_occurrences(buf5, ".") == 2);
 }
 
@@ -150,6 +151,14 @@ void test_starts_with () {
   ASSERT(starts_with(null,null2) == 1);
   ASSERT(starts_with(null, so_yeah) == 0);
   ASSERT(starts_with(pfx_right, null2) == 0);
+  ASSERT(starts_with("WELPzz","WELp") == 0);
+  ASSERT(starts_with("   i guess...,","   i ") == 1);
+  ASSERT(starts_with("   i guess...,","   i  gX") == 0);
+  ASSERT(starts_with("   i guess...,","   i guess..., .") == 0);
+  ASSERT(starts_with("nochance","chance") == 0);
+  ASSERT(starts_with("noNONONONONONO","NO") == 0);
+  ASSERT(starts_with("","") == 1);
+  ASSERT(starts_with(" ", "") == 0);
 }
 
 void test_find_string_length() {
@@ -174,7 +183,10 @@ void test_find_string_length() {
   ASSERT(find_string_length(some) == 4);
   const char* opening_line = "It is a truth universally acknowledged, that a single man in\n";
   ASSERT(find_string_length(opening_line) == 61);
- }
+  ASSERT(find_string_length("notSUPERLONG   ") == 15);
+  ASSERT(find_string_length("\nshort ") == 7);
+  ASSERT(find_string_length("%^&crazy! *#@)$**kaO-2~'?QB+={]") == 31);
+}
 /*
 void test_read_line(TestObjs *objs) {
   // the fmemopen function allows us to treat a character string
