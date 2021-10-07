@@ -1,5 +1,4 @@
-/*`TEXTFILE OUTPUT, INVALID READ/WRITE/JUMP ON MS2, WHICH REGS R WE FREE TO USE FOR LOCAL VARS: WHY DID R1 FIX IT? WILL THE REGISTERS CONFLICT WHEN TESTED TOGETHER IN MAIN????
- * Assembly language implementations of functions declared in
+/* Assembly language implementations of functions declared in
  * textsearch_fns.h
  */
 	.section .rodata
@@ -16,7 +15,7 @@ read_line:
 	cmpb $0, %al
 	jle .LerrorFile
 .LreadNextChar:
-	movq %rax, %rsi			/* why cant we use %al and movb ?*/
+	movq %rax, %rsi		
 	call fgetc
 	cmpb $1, %al
 	jle .LdoneReading
@@ -94,11 +93,11 @@ print_line:
 	.globl count_occurrences
 count_occurrences:
 
-	pushq %r12
+	pushq %r13
 	pushq %r14
 	pushq %r15
 
-	movq $0, %r12
+	movq $0, %r13
 	movq %rdi, %r14
 	movq %rsi, %r15
 
@@ -109,20 +108,20 @@ count_occurrences:
 	call starts_with
 	cmpl $1, %eax
 	jl .LadvanceToNext
-	incq %r12
+	incq %r13
 
 .LadvanceToNext:
-	incq %r12				/* advance to next char */
+	incq %r14				/* advance to next char */
 	movq %r14, %rdi
 	movq %r15, %rsi
 	jmp .LcountOccurences
 
 .LdoneCounting:
-	movq %r12, %rax
+	movq %r13, %rax
 
 	popq %r15
 	popq %r14
-	popq %r12
+	popq %r13
 	ret
 
 

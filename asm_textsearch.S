@@ -24,7 +24,7 @@ main:
 .LprintLines:
 	movq %rdi, %r12
 	movq %rsi, %r13
-	movq (%rsi, , 8) , %rdi
+	movq (%rsi, %r12, 8) , %rdi
 	movq $readFile, %rsi
 	
 .LprintOccurrences:
