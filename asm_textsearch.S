@@ -26,7 +26,7 @@ main:
 	movq stderr(%rip), %rdi
 	movq $errorMsgNumArgs, %rsi
 	call fprintf
-	jmp .Lreturn
+	jmp .LreturnError
 
 .LvalidateFile:
 	decq %r12
@@ -83,7 +83,7 @@ main:
 	movq $errorMsgFile, %rsi
 	call fprintf
 
-.Lreturn:
+.LreturnError:
 	movl $1, %eax
 	popq %r14
 	popq %r13
