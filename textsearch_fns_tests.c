@@ -244,12 +244,12 @@ void test_read_line(TestObjs *objs) {
 }
 
 void test_print_line(TestObjs * objs) {
-  FILE* out = fopen("output.txt", "w+");
-  ASSERT(out != NULL);
+  char buf[MAXLINE + 1];
+  char buf2[MAXLINE + 1];
   char * b = "It is a truth universally acknowledged, that a single man in";
   char * b2 = "possession of a good fortune, must be in want of a wife.";
-  print_line(out, b);
-  print_line(out, b2);
+  print_line(b);
+  print_line(b2);
 
   FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
   read_line(in, buf);
