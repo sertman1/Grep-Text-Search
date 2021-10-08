@@ -87,12 +87,7 @@ ASSERT(count_occurrences(buff, "truth") == 1);
 ASSERT(count_occurrences(buff, "ne") == 1);
 ASSERT(count_occurrences(buff, "ruth") == 1);
 ASSERT(count_occurrences(buff, " ") == 1);
-/* code using read_line function commented out and replaced with literal buf instation instead (until read_line is implemented in ASM)
 
-  FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
-  char buf[MAXLINE + 1];
-  read_line(in, buf);
- */
   const char * buf = "It is a truth universally acknowledged, that a single man in";
   ASSERT(count_occurrences(buf, "It") == 1);
   ASSERT(count_occurrences(buf, "truth") == 1);
@@ -104,24 +99,15 @@ ASSERT(count_occurrences(buff, " ") == 1);
   ASSERT(count_occurrences(buf, "It is a truth universally acknowledged, that a single man in\n") == 0);
   ASSERT(count_occurrences(buf, "IT IS a truth universally acknowledged, that a single man in") == 0);
   ASSERT(count_occurrences(buf, "It is a truth universally acknowledged, that a single man in") == 1);
-/*
-  FILE *in2 = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
-  char buf2[MAXLINE + 1];
-  read_line(in2, buf2);
-*/
+
   const char* buf2 = "So you wanna be hardcore";
   ASSERT(count_occurrences(buf2, "So") == 1);
   ASSERT(count_occurrences(buf2, "nn") == 1);
   ASSERT(count_occurrences(buf2, "2pac") == 0);
   ASSERT(count_occurrences(buf2, "a") == 3);
-/*
-  FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");
-  char buf3[MAXLINE+1];
-  read_line(in3, buf3);
-*/
+
   const char* buf3 = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
   ASSERT(count_occurrences(buf3, "0") == 511);
-  /* read_line(in3, buf3); */
   buf3 = "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
   ASSERT(count_occurrences(buf3, "1") == 511);
   ASSERT(count_occurrences("ThisIsATest", "i") == 1);
@@ -194,10 +180,7 @@ void test_find_string_length() {
   ASSERT(find_string_length("%^&crazy! *#@)$**kaO-2~'?QB+={]") == 31);
 }
 
-void test_read_line(TestObjs *objs) {
-  // the fmemopen function allows us to treat a character string
-  // as an input file
-  
+void test_read_line(TestObjs *objs) { 
     FILE *i = fmemopen((char *) objs->simple, strlen(objs->simple), "r");
   char b[MAXLINE + 1];
   ASSERT(read_line(i, b));
@@ -271,7 +254,7 @@ void test_print_line(TestObjs * objs) {
   print_line(out, buf2);
   fclose(out);
 
-/*  FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
+  FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
   char buf[MAXLINE + 1];
   read_line(in, buf);
 
@@ -316,7 +299,7 @@ void test_print_line(TestObjs * objs) {
   fclose(in3);
   fclose(in4);
   fclose(out2);
- */
+ 
 }
 
 
