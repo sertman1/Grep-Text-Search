@@ -273,18 +273,7 @@ void test_print_line(TestObjs * objs) {
   print_line(buf2);
 
   read_line(in3, buf2);
-<<<<<<< HEAD
   print_line(buf2);
-
-=======
-  print_line(out, buf2);
-
-  FILE *in4 = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
-  char c2 = fgetc(out);
-  while (c2 != EOF) {
-    ASSERT(c2 == fgetc(in4));
-  }
->>>>>>> 2df03dc3e349f8b2a89a98ebc434f0702e6192cd
   fclose(in3);
  
 }
