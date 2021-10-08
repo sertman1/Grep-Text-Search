@@ -9,42 +9,57 @@ charFormat: .string "%c"
 
 	.globl read_line
 read_line:
-	subq $8, %rsp
+	pushq %rbx
+	pushq %r13
+	pushq %r14
+	movq %rsi, %rbx
 	movq %rdi, %r13
+	movq $0, %r14
 	call fgetc
 	cmpb $0, %al
 	jle .LerrorFile
+
 .LreadNextChar:
-	movq %rax, %rsi		
+	cmpq $511, %r14
+	jae .LdoneReading
+	movb %al, (%rbx)
+	movq %r13, %rdi
 	call fgetc
 	cmpb $1, %al
 	jle .LdoneReading
 	cmpb $10, %al
-	jle .LdoneReading
-	incq %rsi
-	incq %r12 
-
+	je .LdoneReading
+	incq %rbx
+	incq %r14
+	jmp .LreadNextChar
+	
 .LdoneReading:
-	cmpq $511, %r12
+	movq $0, %rbx 
+	cmpq $511, %r14
 	jae .LremoveOverflowedChars
 	jmp .LsuccessfulFile
 
 .LremoveOverflowedChars:
 	cmpb $10, %al
 	je .LsuccessfulFile
+	movq %r13, %rdi
 	call fgetc
 	cmpb $0, %al
 	jle .LsuccessfulFile
 	jmp .LremoveOverflowedChars
 	
 .LerrorFile:
-	addq $8, %rsp
+	popq %r14
+	popq %r13
+	popq %rbx
 	movq $0, %rax
 	ret
 .LsuccessfulFile:
-	addq $8, %rsp
+	popq %r14
+	popq %r13
+	popq %rbx
 	movq $1, %rax
-	ret 
+	ret	
 
 /* print_line - prints the specified line of text (up to 511 chars) 
  * to both the console and the specified file.

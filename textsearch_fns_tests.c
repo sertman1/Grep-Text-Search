@@ -4,7 +4,8 @@
 #include "textsearch_fns.h"
 #include "tctest.h"
 
-typedef struct {
+typedef struct { 
+  const char *simple;
   const char *pandp;
   const char *mgf;
   const char *too_much;
@@ -46,7 +47,10 @@ int main(int argc, char **argv) {
 
 TestObjs *setup(void) {
   TestObjs *objs = malloc(sizeof(TestObjs));
-
+	
+ objs->simple = 
+    "simple";
+  	
   objs->pandp =
     "It is a truth universally acknowledged, that a single man in\n"
     "possession of a good fortune, must be in want of a wife.\n"
@@ -193,10 +197,20 @@ void test_find_string_length() {
 void test_read_line(TestObjs *objs) {
   // the fmemopen function allows us to treat a character string
   // as an input file
+  
+    FILE *i = fmemopen((char *) objs->simple, strlen(objs->simple), "r");
+  char b[MAXLINE + 1];
+  ASSERT(read_line(i, b));
+ FILE* o = fopen("output.txt", "w+");
+  print_line(o, b);
+  ASSERT(0 == strcmp(b, "simple"));
+
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
 
   ASSERT(read_line(in, buf));
+    FILE* out = fopen("output.txt", "w+");
+  print_line(out, buf);
   ASSERT(0 == strcmp(buf, "It is a truth universally acknowledged, that a single man in"));
 
   ASSERT(read_line(in, buf));
