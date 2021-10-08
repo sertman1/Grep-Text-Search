@@ -18,15 +18,12 @@ int main(int argc, char **argv) {
   char buffer[MAXLINE + 1] = {'\0'}; // to store individual lines of text from file
 
   if (argc == 3) {  // print lines
-    
-    FILE* output = fopen("output.txt", "w+");
 
     while (read_line(input_file, buffer) != 0) { // while you can still get lines of text from the input file
       if (count_occurrences(buffer, desired_string)) { // if any occurences were found, print line
-        print_line(output, buffer);
+        print_line(buffer);
       }
     }
-    fclose(output);
   }
   else { // count occurences
     int num_occurences = 0;

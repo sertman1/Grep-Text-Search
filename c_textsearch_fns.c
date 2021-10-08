@@ -28,17 +28,15 @@ int read_line(FILE *in, char *buf) {
     }
 }
 
-void print_line(FILE* out, const char *buf) {
+void print_line(const char *buf) {
     int i = 0;
     for (; i < MAXLINE; i++) {
         if (buf[i] == '\0') {
             break;
         }
         printf("%c", buf[i]);
-        fputc(buf[i], out);
     }
     printf("\n");
-    fputc('\n', out);
 }
 
 unsigned count_occurrences(const char *line, const char *str) {

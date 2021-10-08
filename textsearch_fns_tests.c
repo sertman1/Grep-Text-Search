@@ -21,7 +21,7 @@ void test_read_line(TestObjs *objs);
 void test_print_line(TestObjs *objs);
 void test_find_string_length();
 void test_starts_with();
-void test_count_occurences(TestObjs *objs);
+void test_count_occurences();
 
 
 int main(int argc, char **argv) {
@@ -79,7 +79,7 @@ void cleanup(TestObjs *objs) {
   free(objs);
 }
 
-void test_count_occurences(TestObjs *objs) {
+void test_count_occurences() {
 char *b = "one";
 ASSERT(count_occurrences(b, "one") == 1);
 char * buff = "One truth";
@@ -184,16 +184,14 @@ void test_read_line(TestObjs *objs) {
     FILE *i = fmemopen((char *) objs->simple, strlen(objs->simple), "r");
   char b[MAXLINE + 1];
   ASSERT(read_line(i, b));
- FILE* o = fopen("output.txt", "w+");
-  print_line(o, b);
+  print_line(b);
   ASSERT(0 == strcmp(b, "simple"));
 
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
 
   ASSERT(read_line(in, buf));
-    FILE* out = fopen("output.txt", "w+");
-  print_line(out, buf);
+  print_line(buf);
   ASSERT(0 == strcmp(buf, "It is a truth universally acknowledged, that a single man in"));
 
   ASSERT(read_line(in, buf));
@@ -246,59 +244,38 @@ void test_read_line(TestObjs *objs) {
 }
 
 void test_print_line(TestObjs * objs) {
-  FILE* out = fopen("output.txt", "w+");
-  ASSERT(out != NULL);
-  char * buf = "It is a truth universally acknowledged, that a single man in";
-  char * buf2 = "possession of a good fortune, must be in want of a wife.";
-  print_line(out, buf);
-  print_line(out, buf2);
-  fclose(out);
+  char buf[MAXLINE + 1];
+  char buf2[MAXLINE + 1];
+  char * b = "It is a truth universally acknowledged, that a single man in";
+  char * b2 = "possession of a good fortune, must be in want of a wife.";
+  print_line(b);
+  print_line(b2);
 
   FILE *in = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
-  char buf[MAXLINE + 1];
   read_line(in, buf);
 
-  print_line(out, buf);
+  print_line(buf);
 
   read_line(in, buf);
-  print_line(out, buf);
+  print_line(buf);
 
   read_line(in, buf);
-  print_line(out, buf);
+  print_line(buf);
 
   read_line(in, buf);
-  print_line(out, buf);
+  print_line(buf);
 
-  FILE *in2 = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
-  char c = fgetc(out);
-  while (c != EOF) {
-    ASSERT(c == fgetc(in2));
-  }
-  fclose(out);
   fclose(in);
-  fclose(in2);
 
   FILE *in3 = fmemopen((char *) objs->too_much, strlen(objs->too_much), "r");    
-  char buf2[MAXLINE + 1];
   read_line(in3, buf2);
 
-  FILE* out2 = fopen("output.txt", "w+");
-  ASSERT(out != NULL);
-
-  print_line(out, buf2);
+  print_line(buf2);
 
   read_line(in3, buf2);
-  print_line(out, buf2);
-
-  FILE *in4 = fmemopen((char *) objs->mgf, strlen(objs->mgf), "r");
-  char c2 = fgetc(out);
-  while (c2 != EOF) {
-    ASSERT(c2 == fgetc(in4));
-  }
+  print_line(buf2);
 
   fclose(in3);
-  fclose(in4);
-  fclose(out2);
  
 }
 

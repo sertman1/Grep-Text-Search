@@ -74,26 +74,22 @@ read_line:
 	.globl print_line
 print_line:
 	subq $8, %rsp
-	movq %rdi, %r12
-	movq %rsi, %r13		
+	movq %rdi, %r13		
 
 .LnextChar:
-	cmpb $0, (%rsi)
+	cmpb $0, (%rdi)
 	jle .LdonePrinting
+	movq (%rdi), %rsi
 	movq $charFormat, %rdi
-	movq (%rsi), %rsi
 	call printf
-	movq (%rsi), %rdi
-	movq %r12, %rsi
-	call fputc 
 	incq %r13
-	movq %r13, %rsi
+	movq %r13, %rdi
 	jmp .LnextChar
 
 .LdonePrinting:
 	movq $newLine, %rdi
 	call printf
-	movq %r12, %rsi
+	movq %r13, %rdi
 	addq $8, %rsp
 	ret
 
