@@ -73,7 +73,7 @@ read_line:
 
 	.globl print_line
 print_line:
-	subq $8, %rsp
+	pushq %r13
 	movq %rdi, %r13		
 
 .LnextChar:
@@ -90,7 +90,7 @@ print_line:
 	movq $newLine, %rdi
 	call printf
 	movq %r13, %rdi
-	addq $8, %rsp
+	popq %r13
 	ret
 
 /*
