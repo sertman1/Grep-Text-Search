@@ -6,7 +6,7 @@
 errorMsgNumArgs: .string "Error: invalid number of command line arguments\n"
 errorMsgFile: .string "Error: unable to open file\n"
 readFile: .string "r"
-occurrencesFmt: .string "%d occurrences(s)\n"
+occurrencesFmt: .string "%d occurrence(s)\n"
 
 	.section .text
 
