@@ -12,12 +12,9 @@ occurrencesFmt: .string "%d occurrence(s)\n"
 
 	.globl main
 main:
-	pushq %rbp
-	subq $8, %rsp
 	pushq %r12			/* r12 == argc */
 	pushq %r13			/* r13 == num_occurrences for -c command line option */
 	pushq %r14			/* r14 == string to be searched for */
-	movq %rsp, %rbp
 	movq %rdi, %r12
 	cmpq $3, %rdi			/* rdi == argc: check if the proper number of args were passed */
 	je .LvalidateFile		/* if so, check that the file passed was valid */
@@ -88,8 +85,6 @@ main:
 	popq %r14
 	popq %r13
 	popq %r12
-	addq $8, %rsp
-	popq %rbp
 	ret
 
 .LreturnAndCloseFile:
@@ -100,6 +95,4 @@ main:
 	popq %r14
         popq %r13
         popq %r12
-	addq $8, %rsp
-	popq %rbp
 	ret
