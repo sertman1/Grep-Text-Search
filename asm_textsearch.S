@@ -84,7 +84,7 @@ main:
 	call fprintf
 
 .Lreturn:
-	movl $0, %eax
+	movl $1, %eax
 	popq %r14
 	popq %r13
 	popq %r12
