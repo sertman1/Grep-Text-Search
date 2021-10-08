@@ -38,6 +38,8 @@ main:
 	movq %r12, %r10	
 	movq %rax, %r12		/* r12 now stores file pointer */	
 	subq $512, %rsp		/* make room for 512 chars */
+	pushq %rbp
+	movq %rsp, %rbp
 	cmpq $2, %r10
 	je .LprintOccurrences
 
@@ -47,7 +49,14 @@ main:
 	call read_line
 	cmpb $0, %al
 	je .LreturnAlignBuffer
-	
+	movq %rsp, %rdi
+	movq %r14, %rsi
+	call count_occurrences
+	cmpb $0, %al	
+	jle .LprintLines
+	movq %rbp, %rdi
+	call print_line	
+	jmp .LprintLines
 	
 .LprintOccurrences:
 	movq $0, %r13		/* num_occurrences counter variable */
@@ -84,6 +93,7 @@ main:
 
 .LreturnAlignBuffer:
         movl $0, %eax
+	popq %rbp
 	addq $536, %rsp
 	popq %r14
         popq %r13
