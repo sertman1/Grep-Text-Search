@@ -12,8 +12,8 @@ read_line:
 	pushq %rbx
 	pushq %r13
 	pushq %r14
-	movq %rsi, %rbx
 	movq %rdi, %r13
+	movq %rsi, %rbx
 	movq $0, %r14
 	call fgetc
 	cmpb $0, %al
@@ -34,7 +34,8 @@ read_line:
 	jmp .LreadNextChar
 	
 .LdoneReading:
-	movq $0, %rbx 
+	incq %rbx
+	movq $0, (%rbx) 
 	cmpq $511, %r14
 	jae .LremoveOverflowedChars
 	jmp .LsuccessfulFile
