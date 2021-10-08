@@ -18,6 +18,8 @@ read_line:
 	call fgetc
 	cmpb $0, %al
 	jle .LerrorFile
+	cmpb $10, %al
+	je .LdoneReading
 
 .LreadNextChar:
 	cmpq $511, %r14
@@ -25,16 +27,15 @@ read_line:
 	movb %al, (%rbx)
 	movq %r13, %rdi
 	call fgetc
-	cmpb $1, %al
-	jle .LdoneReading
-	cmpb $10, %al
-	je .LdoneReading
 	incq %rbx
+	cmpb $0, %al
+        jle .LdoneReading
+        cmpb $10, %al
+        je .LdoneReading
 	incq %r14
 	jmp .LreadNextChar
 	
 .LdoneReading:
-	incq %rbx
 	movq $0, (%rbx) 
 	cmpq $511, %r14
 	jae .LremoveOverflowedChars
