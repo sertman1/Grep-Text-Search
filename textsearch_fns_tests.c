@@ -186,7 +186,7 @@ void test_read_line(TestObjs *objs) {
   ASSERT(read_line(i, b));
   print_line(b);
   ASSERT(0 == strcmp(b, "simple"));
-
+  fclose(i);
   FILE *in = fmemopen((char *) objs->pandp, strlen(objs->pandp), "r");
   char buf[MAXLINE + 1];
 

@@ -174,9 +174,8 @@ find_string_length:
 
 	.globl starts_with
 starts_with:
-
-	subq $8, %rsp 				
-	movl $1, %eax 			/* assume true at first */
+	subq $8, %rsp
+	movl $1, %eax			/* assume true at first */
 					/* check for deniability in loops: */
 .LcompareCharacters:
 	movb (%rsi), %r10b		/* store 1 char into 'temp' %r10 space for comparison */
@@ -193,5 +192,5 @@ starts_with:
 	jmp .LcompareCharacters		/* otherwise, continue checking for instance where thier chars dont equal */
 
 .LdoneWithComparison:
-	addq $8, %rsp		
+	addq $8, %rsp
 	ret

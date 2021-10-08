@@ -12,10 +12,12 @@ occurrencesFmt: .string "%d occurrence(s)\n"
 
 	.globl main
 main:
+	pushq %rbp
+	subq $8, %rsp
 	pushq %r12
 	pushq %r13
 	pushq %r14
-	subq $24, %rsp
+	movq %rsp, %rbp
 	movq %rdi, %r12
 	cmpq $3, %rdi
 	je .LvalidateFile
@@ -38,26 +40,24 @@ main:
 	movq %r12, %r10	
 	movq %rax, %r12		/* r12 now stores file pointer */	
 	subq $512, %rsp		/* make room for 512 chars */
-	pushq %rbp
-	movq %rsp, %rbp
 	cmpq $2, %r10
 	je .LprintOccurrences
-
+	
 .LprintLines:
 	movq %r12, %rdi
 	movq %rsp, %rsi
 	call read_line
 	cmpb $0, %al
-	je .LreturnAlignBuffer
+	je .LreturnAndCloseFile
 	movq %rsp, %rdi
 	movq %r14, %rsi
 	call count_occurrences
 	cmpb $0, %al	
 	jle .LprintLines
-	movq %rbp, %rdi
+	movq %rsp, %rdi
 	call print_line	
 	jmp .LprintLines
-	
+
 .LprintOccurrences:
 	movq $0, %r13		/* num_occurrences counter variable */
 .LcalculateOccurrences:
@@ -76,7 +76,7 @@ main:
 	movq $occurrencesFmt, %rdi
 	movq %r13, %rsi
 	call printf	
-	jmp .LreturnAlignBuffer
+	jmp .LreturnAndCloseFile
 
 .LerrorFile:
 	movq stderr(%rip), %rdi
@@ -85,17 +85,21 @@ main:
 
 .Lreturn:
 	movl $0, %eax
-	addq $24, %rsp
 	popq %r14
 	popq %r13
 	popq %r12
+	addq $8, %rsp
+	popq %rbp
 	ret
 
-.LreturnAlignBuffer:
+.LreturnAndCloseFile:
+	movq %r12, %rdi
+	call fclose
         movl $0, %eax
-	popq %rbp
-	addq $536, %rsp
+	addq $512, %rsp
 	popq %r14
         popq %r13
         popq %r12
+	addq $8, %rsp
+	popq %rbp
 	ret
