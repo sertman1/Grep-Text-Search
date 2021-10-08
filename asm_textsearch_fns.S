@@ -5,56 +5,66 @@
 
 newLine: .string "\n"  
 charFormat: .string "%c"
+	
 	.section .text
+
+/* read_line - reads a line of text (up to 511 chars) from the specified 
+ * file and writes it into the specified buffer
+ *
+ * Parameters:
+ *    in - pointer to the file struct whose lines of text will be read from
+ *    buf - the buffer of up to 511 chars which will store one line of text from in 
+ */
 
 	.globl read_line
 read_line:
-	pushq %rbx
-	pushq %r13
-	pushq %r14
-	movq %rdi, %r13
-	movq %rsi, %rbx
-	movq $0, %r14
+	pushq %rbx		/* rbx will mirror the buffer */
+	pushq %r13		/* r13 holds the FILE* */
+	pushq %r14		/* r14 used as a counter for lines > 511 chars */
+
+	movq %rdi, %r13		/* r13 = in */
+	movq %rsi, %rbx		/* rbx = buf */
+	movq $0, %r14		/* counter = 0 */
 	call fgetc
-	cmpb $0, %al
-	jle .LerrorFile
-	cmpb $10, %al
+	cmpb $0, %al		/* were we unable to retrieve a single char? */
+	jle .LerrorFile		/* if so, return 0 to indicate failure */
+	cmpb $10, %al		/* otherwise, retrieve chars until newline is reached */
 	je .LdoneReading
 
 .LreadNextChar:
-	cmpq $511, %r14
+	cmpq $511, %r14		/* have we reached the maxmium number of chars per line? */
 	jae .LdoneReading
-	movb %al, (%rbx)
+	movb %al, (%rbx)	/* add result of fgetc to buffer */
 	movq %r13, %rdi
 	call fgetc
-	incq %rbx
-	cmpb $0, %al
+	incq %rbx		/* shift buffer to its next index */
+	cmpb $0, %al		/* check for EOF */
         jle .LdoneReading
-        cmpb $10, %al
+        cmpb $10, %al		/* check for NL */
         je .LdoneReading
-	incq %r14
+	incq %r14		/* counter ++ */
 	jmp .LreadNextChar
 	
 .LdoneReading:
-	movq $0, (%rbx) 
-	cmpq $511, %r14
-	jae .LremoveOverflowedChars
+	movq $0, (%rbx) 	/* add null terminator to complete 'building' of buffer */
+	cmpq $511, %r14		/* did the line have more chars than could be stored? */ 
+	jae .LremoveExcess	/* if so, force FILE* to point to next line of text for future read_line calls */
 	jmp .LsuccessfulFile
 
-.LremoveOverflowedChars:
+.LremoveExcess:
 	cmpb $10, %al
 	je .LsuccessfulFile
-	movq %r13, %rdi
-	call fgetc
+	movq %r13, %rdi		
+	call fgetc		/* call fgetc until EOF or newline has been reached */
 	cmpb $0, %al
 	jle .LsuccessfulFile
-	jmp .LremoveOverflowedChars
+	jmp .LremoveExcess
 	
 .LerrorFile:
 	popq %r14
 	popq %r13
 	popq %rbx
-	movq $0, %rax
+	movq $0, %rax		/* 0 return value indicates error file */
 	ret
 .LsuccessfulFile:
 	popq %r14
@@ -64,25 +74,24 @@ read_line:
 	ret	
 
 /* print_line - prints the specified line of text (up to 511 chars) 
- * to both the console and the specified file.
+ * to the console
  *
  * Parameters:
- *    out - pointer to the file struct who will have the line printed to
- *    buf - the line of text to be printed
+ *    buf - the line of text to be printed to the console
  */
 
 	.globl print_line
 print_line:
-	pushq %r13
-	movq %rdi, %r13		
+	pushq %r13		/* r13 will mirror the bufer string of text */
+	movq %rdi, %r13		/* r13 = buf */
 
 .LnextChar:
-	cmpb $0, (%rdi)
+	cmpb $0, (%rdi)		/* have we reached the end of the string ? */
 	jle .LdonePrinting
-	movq (%rdi), %rsi
+	movq (%rdi), %rsi	/* if not, print current char buf points to to console */
 	movq $charFormat, %rdi
 	call printf
-	incq %r13
+	incq %r13		/* increment buf to point to next char */
 	movq %r13, %rdi
 	jmp .LnextChar
 
@@ -105,33 +114,30 @@ print_line:
 
 	.globl count_occurrences
 count_occurrences:
+	pushq %r13		/* counter variable to be returned */
+	pushq %r14		/* alias for line parameter */
+	pushq %r15		/* alias for str */
 
-	pushq %r13
-	pushq %r14
-	pushq %r15
-
-	movq $0, %r13
+	movq $0, %r13	 	/* counter = 0 */
 	movq %rdi, %r14
 	movq %rsi, %r15
 
 .LcountOccurences:
-	cmpb $0, (%r14)
+	cmpb $0, (%r14)		/* has the null terminator of the line been reached yet? */
 	jle .LdoneCounting
-
 	call starts_with
-	cmpl $1, %eax
-	jl .LadvanceToNext
-	incq %r13
+	cmpl $1, %eax		/* does the current char line point to begin with str? */
+	jl .LadvanceToNext	/* if not, check succeeding chars */
+	incq %r13		/* if so, occurrence found, counter++ */
 
 .LadvanceToNext:
-	incq %r14				/* advance to next char */
+	incq %r14		/* advance to next char */
 	movq %r14, %rdi
 	movq %r15, %rsi
 	jmp .LcountOccurences
 
 .LdoneCounting:
 	movq %r13, %rax
-
 	popq %r15
 	popq %r14
 	popq %r13
@@ -148,7 +154,6 @@ count_occurrences:
 
 	.globl find_string_length
 find_string_length:
-
 	subq $8, %rsp 		
 	movl $0, %eax 		/* length = 0 at start */
 
